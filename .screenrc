@@ -1,0 +1,2 @@
+hardstatus string "%H"
+caption always "%?%F%{-b wb}%:%{-b bb}%?%C %?%F%{-b yb}%? %L=%-Lw%45>%{+b by}%n%f*%t%{-}%+Lw%-0<"
