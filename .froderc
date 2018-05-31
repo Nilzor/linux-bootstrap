@@ -50,13 +50,21 @@ Vg-EnableLog() {
 spidf() {
 	adb shell input text "frode.nilsen@vg.no"
 	adb shell input keyevent 66
-	adb shell input text "256aries"	
+	adb shell input text ""	
+}
+
+spidn1() {
+	adb shell input text "nilzor@gmail.com"
+}
+
+spidn2() {
+	adb shell input text "asdfasdf"
 }
 
 spid() {
 	adb shell input text "nilzor@gmail.com"
 	adb shell input keyevent 66
-	adb shell input text "256aries"	
+	adb shell input text "asdfasdf"	
 }
 spidv() {
 	adb shell input text "vgmobil.andriod+1@gmail.com"
@@ -143,9 +151,14 @@ gpull() {
 	gcheckout $BRANCH
 }
 
+cnp() {
+        google-chrome "https://jira.schibsted.io/browse/CNP-$1"
+}
+
 alias rmorig="find . -type f -name '*.orig' -delete"
 alias gitgb="gitg >/dev/null 2>&1 &"
-alias vpn="sudo openvpn --script-security 2 --config ~/vpn/vg.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/client.down --auth-user-pass ~nilzor/vpn/vpn_user_pass"
+alias vpn="sudo openvpn --script-security 2 --config ~/vpn/vg.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/client.down"
+#alias vpn="sudo openvpn --script-security 2 --config ~/vpn/vg.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/client.down --auth-user-pass ~nilzor/vpn/vpn_user_pass"
 alias vpnh="sudo openvpn --script-security 2 --config ~/vpn/heimdall.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/update-resolv-conf  --auth-user-pass ~nilzor/vpn/heimdall_user_pass"
 alias gitg="gitg >/dev/null 2>&1 &"
 alias kraken="gitkraken >/dev/null 2>&1 &"
@@ -161,9 +174,13 @@ alias gr="./gradle"
 alias showreport="google-chrome testing/build/reports/composer/debug/html-report/index.html"
 alias ls="BLOCK_SIZE=\"'1\" ls"
 alias gradledep="gradle library:dependencyInsight --configuration compile --dependency $1"
-	
+alias herm="cd ~/repos/android-hermes-app"
+alias atxt="adb shell input text $1"
+alias two='echo two$1'
+alias githuburl='git remote -v | grep push | cut -f 2 | cut -d " " -f 1 | sed "s/\:/\//" | sed "s/git@/https:\/\//" | sed "s/\.git//"'
+alias githubrepo='google-chrome `githuburl`'
+alias githubbranch='google-chrome `githuburl`/tree/`gbranch`'
+alias pulldevelop='git fetch -u origin develop:develop'
 
 PATH=$PATH:/home/nilzor/Tools/node/bin:/home/nilzor/Tools/scripts:/home/nilzor/Tools/gsutil
 
-export CHANGELOG_GITHUB_TOKEN=64ea1c792fcc73483d7e8fd4494e7d1be8fb21eb
-export GITHUB_TOKEN=$CHANGELOG_GITHUB_TOKEN
