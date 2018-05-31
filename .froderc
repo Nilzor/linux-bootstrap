@@ -1,0 +1,186 @@
+And-Screenshot() {
+	if [ "$1" = "" ] ; then echo "Specify output file name"
+	else         
+		adb shell screencap -p /sdcard/screen.png
+		adb pull /sdcard/screen.png
+		adb shell rm /sdcard/screen.png
+		PCT=$2
+		if [ "$PCT" = "" ]; then PCT=33%; fi
+		convert screen.png -resize $PCT $1
+		image2clip $1
+		rm screen.png 
+	fi 
+}
+
+And-Record() {
+	if [ "$1" -eq "" ] ; then echo "Specify output file name"
+	else
+		tmpFile=/sdcard/temp-video.mp4         
+		adb shell screenrecord $tmpFile
+                sleep 1
+		adb pull $tmpFile $1
+		adb shell rm $tmpFile
+	fi
+}
+
+And-Rdump() {
+	adb pull /sdcard/temp-video.mp4 .
+	adb shell rm $tmpFile
+}
+
+Vg-CommandItest() {
+	adb shell am broadcast -a com.agens.android.vgsnarvei.COMMAND -e type $1 -e buildType itest ${@:2}
+}
+Vg-CommandRelease() {
+	adb shell am broadcast -a com.agens.android.vgsnarvei.COMMAND -e type $1 -e buildType release ${@:2}
+}
+
+Vg-CommandDebug() {
+	TEMP="adb shell am broadcast -a com.agens.android.vgsnarvei.COMMAND -e type $1 -e buildType debug ${@:2}"
+	echo $TEMP
+	eval $TEMP
+}
+
+Vg-EnableLog() {
+	adb shell am broadcast -a com.agens.android.vgsnarvei.COMMAND -e type enablelog -e buildType release
+}
+
+		trap ' ' INT
+
+spidf() {
+	adb shell input text "frode.nilsen@vg.no"
+	adb shell input keyevent 66
+	adb shell input text ""	
+}
+
+spidn1() {
+	adb shell input text "nilzor@gmail.com"
+}
+
+spidn2() {
+	adb shell input text "asdfasdf"
+}
+
+spid() {
+	adb shell input text "nilzor@gmail.com"
+	adb shell input keyevent 66
+	adb shell input text "asdfasdf"	
+}
+spidv() {
+	adb shell input text "vgmobil.andriod+1@gmail.com"
+	adb shell input keyevent 66
+	adb shell input text "bluesharkfin"	
+}
+
+Vg-PushEmuDebug() {
+	echo 0: $0
+	echo 2: $2
+	ID=-1
+	DESC="SomeDescription"
+	if [ "$3" != "" ] ; then DESC=$3 ; fi
+	if [ "$4" != "" ] ; then ID=$4 ; fi
+	Vg-CommandDebug notification -e src $1 -e "title" "$2" -e description "$DESC" -e id $ID	
+}
+
+Vg-PushEmuRelease() {
+	ID=-1
+	DESC="Some description"
+	if [ "$3" != "" ] ; then DESC=$3 ; fi
+	if [ "$4" != "" ] ; then ID=$4 ; fi
+	Vg-CommandRelease notification -e src "$1" -e "title" "$2" -e description "$DESC" -e id $ID
+}
+
+Vg-NavigateRelease() {
+	Vg-CommandRelease navigate -e url $1
+}	
+Vg-NavigateDebug() {
+	Vg-CommandDebug navigate -e url $1
+}	
+
+gcheckout() {
+	git fetch
+	git checkout $1 $2 $3 $5 $6
+	git submodule update
+}
+
+gbranch()  {
+	if [ -z "$1" ]; then
+		git status | grep "On branch" | cut -d " " -f 3
+	else
+		git branch $1
+		# git branch --set-upstream-to=origin/$1 $1
+		git checkout $1
+	fi
+}
+unin() 
+{
+	if [ "$1" = "vg" ]; then adb uninstall com.agens.android.vgsnarvei;fi
+	if [ "$1" = "vgd" ]; then adb uninstall com.agens.android.vgsnarvei.debug; fi 
+}
+
+gissue() {
+  google-chrome https://github.schibsted.io/vg/vg-android/issues/$1
+}
+
+issue() {
+  REPO=vg-android
+  NR=$1
+  if [ "$2" != "" ]; then REPO=$2;fi
+  google-chrome https://github.schibsted.io/vg/$REPO/issues/$NR
+}
+
+gitclean() {
+	find ./ -iname *\.BASE\.* -exec rm {} \;
+	find ./ -iname *\.LOCAL\.* -exec rm {} \;
+	find ./ -iname *\.REMOTE\.* -exec rm {} \;
+	find ./ -iname *\.BACKUP\.* -exec rm {} \;
+	find ./ -iname *.orig -exec rm {} \;
+}
+
+aar() {
+	DIR=`mktemp -d`
+	unzip $1 -d $DIR/
+	unzip $DIR/classes.jar -d $DIR/
+	nautilus --browser $DIR
+}
+
+gpull() {
+	BRANCH=`gbranch`
+	gcheckout $1
+	git pull && git submodule foreach git fetch && git submodule update
+	gcheckout $BRANCH
+}
+
+cnp() {
+        google-chrome "https://jira.schibsted.io/browse/CNP-$1"
+}
+
+alias rmorig="find . -type f -name '*.orig' -delete"
+alias gitgb="gitg >/dev/null 2>&1 &"
+alias vpn="sudo openvpn --script-security 2 --config ~/vpn/vg.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/client.down"
+#alias vpn="sudo openvpn --script-security 2 --config ~/vpn/vg.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/client.down --auth-user-pass ~nilzor/vpn/vpn_user_pass"
+alias vpnh="sudo openvpn --script-security 2 --config ~/vpn/heimdall.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/update-resolv-conf  --auth-user-pass ~nilzor/vpn/heimdall_user_pass"
+alias gitg="gitg >/dev/null 2>&1 &"
+alias kraken="gitkraken >/dev/null 2>&1 &"
+alias glog="git lg"
+alias gpullsub="git pull && git submodule foreach git fetch && git submodule update"
+alias adbr="adb kill-server;adb devices"
+alias purgeall="ssh static-web-01 /services/vhost/static.vg.no/app-snarvei/config/purge.sh"
+alias spoon="java -jar ~/Downloads/spoon-runner-1.2.0-jar-with-dependencies.jar --apk VG/build/outputs/apk/VG-production-debug.apk --test-apk VG/build/outputs/apk/VG-production-debug-androidTest-unaligned.apk"
+alias gradle="./gradlew -PminSdk=21"
+alias travis="/var/lib/gems/2.3.0/gems/travis-1.8.8/bin/travis"
+alias dugb="du -h * | grep '^[0-9]\+,\?[0-9]*G'"
+alias gr="./gradle"
+alias showreport="google-chrome testing/build/reports/composer/debug/html-report/index.html"
+alias ls="BLOCK_SIZE=\"'1\" ls"
+alias gradledep="gradle library:dependencyInsight --configuration compile --dependency $1"
+alias herm="cd ~/repos/android-hermes-app"
+alias atxt="adb shell input text $1"
+alias two='echo two$1'
+alias githuburl='git remote -v | grep push | cut -f 2 | cut -d " " -f 1 | sed "s/\:/\//" | sed "s/git@/https:\/\//" | sed "s/\.git//"'
+alias githubrepo='google-chrome `githuburl`'
+alias githubbranch='google-chrome `githuburl`/tree/`gbranch`'
+alias pulldevelop='git fetch -u origin develop:develop'
+
+PATH=$PATH:/home/nilzor/Tools/node/bin:/home/nilzor/Tools/scripts:/home/nilzor/Tools/gsutil
+source .ssh/credentials
