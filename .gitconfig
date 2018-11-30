@@ -1,0 +1,35 @@
+[user]
+	name = Frode Nilsen
+	email = frode.nilsen@schibsted.com
+[push]
+	default = current
+[merge]
+	tool = meld
+#	tool = bc4
+
+[difftool "bc4"]
+    cmd = "bcompare" \"$LOCAL\" \"$REMOTE\"
+[mergetool "bc4"]
+    cmd = "bcompare" \"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\"
+
+[mergetool "meld"]
+	path = /usr/bin/meld
+
+[difftool "meld"]
+        cmd = meld "$LOCAL" "$REMOTE"
+[difftool]
+	prompt=false
+[diff]
+        tool = meld
+	external = meld
+
+[core]
+	autocrlf = input
+
+[alias]
+    find-merge = "!sh -c 'commit=$0 && branch=${1:-HEAD} && (git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n) | sort -k2 | uniq -f1 -d | sort -n | tail -1 | cut -f2'"
+    show-merge = "!sh -c 'merge=$(git find-merge $0 $1) && [ -n \"$merge\" ] && git show $merge'"
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    logbranch = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --no-merges develop..
+
+
