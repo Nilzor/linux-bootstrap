@@ -155,6 +155,9 @@ cnp() {
         google-chrome "https://jira.schibsted.io/browse/CNP-$1"
 }
 
+
+jqtype() { jq ".items | map(select(.type == \"$1\"))"; }
+
 alias rmorig="find . -type f -name '*.orig' -delete"
 alias gitgb="gitg >/dev/null 2>&1 &"
 alias vpn="sudo openvpn --script-security 2 --config ~/vpn/vg.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/client.down"
