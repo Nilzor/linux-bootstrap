@@ -1,15 +1,19 @@
 And-Screenshot() {
-	if [ "$1" = "" ] ; then echo "Specify output file name"
-	else         
-		adb shell screencap -p /sdcard/screen.png
-		adb pull /sdcard/screen.png
-		adb shell rm /sdcard/screen.png
-		PCT=$2
-		if [ "$PCT" = "" ]; then PCT=33%; fi
-		convert screen.png -resize $PCT $1
-		image2clip $1
-		rm screen.png 
-	fi 
+	FILENAME=$1
+	if [ "$1" = "" ]; then
+	    DELETE_AFTER=true
+        FILENAME=tmp_screenshot.png
+    else DELETE_AFTER=false
+	fi         
+	adb shell screencap -p /sdcard/screen.png
+	adb pull /sdcard/screen.png
+	adb shell rm /sdcard/screen.png
+	PCT=$2
+	if [ "$PCT" = "" ]; then PCT=33%; fi
+	convert screen.png -resize $PCT $FILENAME
+	image2clip $FILENAME
+	rm screen.png 
+	if [ "$DELETE_AFTER" = true ]; then rm $FILENAME; fi
 }
 
 And-Record() {
@@ -162,7 +166,8 @@ alias rmorig="find . -type f -name '*.orig' -delete"
 alias gitgb="gitg >/dev/null 2>&1 &"
 alias vpn="sudo openvpn --script-security 2 --config ~/vpn/vg.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/client.down"
 #alias vpn="sudo openvpn --script-security 2 --config ~/vpn/vg.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/client.down --auth-user-pass ~nilzor/vpn/vpn_user_pass"
-alias vpnh="sudo openvpn --script-security 2 --config ~/vpn/heimdall.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/update-resolv-conf  --auth-user-pass ~nilzor/vpn/heimdall_user_pass"
+alias vpnh="sudo openvpn --script-security 2 --config ~/vpn/heimdall.ovpn --up /etc/openvpn/update-resolv-conf --down /etc/openvpn/update-resolv-conf --auth-user-pass ~/vpn/heimdall_user_pass"
+
 alias gitg="gitg >/dev/null 2>&1 &"
 alias kraken="gitkraken >/dev/null 2>&1 &"
 alias glog="git lg"
