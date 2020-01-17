@@ -1,6 +1,5 @@
 set tabstop=2
 set shiftwidth=2
-colorscheme molokai
 set autoindent
 exec "set tags=tags;/"
 map f1 :b1<cr>

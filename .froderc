@@ -159,6 +159,9 @@ cnp() {
         google-chrome "https://jira.schibsted.io/browse/CNP-$1"
 }
 
+#adbtcp {
+#    adb tcpip 5555 && adb connect $1:5555
+#}
 
 jqtype() { jq ".items | map(select(.type == \"$1\"))"; }
 
@@ -192,3 +195,7 @@ alias pulldevelop='git fetch -u origin develop:develop'
 
 PATH=$PATH:/home/nilzor/Tools/node/bin:/home/nilzor/Tools/scripts:/home/nilzor/Tools/gsutil
 
+# Doc:
+# Getting Chrome launch from terminal work:
+# Open file: $HOME/.local/share/applications/google-chrome.desktop, 
+# Exec=/opt/google/chrome/chrome %U
