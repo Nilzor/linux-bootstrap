@@ -159,9 +159,9 @@ cnp() {
         google-chrome "https://jira.schibsted.io/browse/CNP-$1"
 }
 
-#adbtcp {
-#    adb tcpip 5555 && adb connect $1:5555
-#}
+adbtcp() {
+    adb tcpip 5555 && adb connect $1:5555
+}
 
 jqtype() { jq ".items | map(select(.type == \"$1\"))"; }
 
@@ -190,7 +190,7 @@ alias atxt="adb shell input text $1"
 alias two='echo two$1'
 alias githuburl='git remote -v | grep push | cut -f 2 | cut -d " " -f 1 | sed "s/\:/\//" | sed "s/git@/https:\/\//" | sed "s/\.git//"'
 alias githubrepo='google-chrome `githuburl`'
-alias githubbranch='google-chrome `githuburl`/tree/`gbranch`'
+alias githubbranch='google-chrome `githuburl`/tree/`gbranch` && echo Did you run ktlintFormat?'
 alias pulldevelop='git fetch -u origin develop:develop'
 
 PATH=$PATH:/home/nilzor/Tools/node/bin:/home/nilzor/Tools/scripts:/home/nilzor/Tools/gsutil
