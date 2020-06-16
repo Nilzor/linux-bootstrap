@@ -38,4 +38,5 @@
     pushf = "!sh -c 'BRANCH=`git cur && git push --force-with-lease origin $BRANCH'"
     pushff = "!sh -c 'BRANCH=`git cur && git push -f origin $BRANCH'"
     up = "!sh -c 'git checkout master && git pull'"
+    cob = "checkout -b"
     
