@@ -37,4 +37,5 @@
     cur = "!sh -c 'git branch -a | grep \"*\" | cut -d \" \" -f 2'"
     pushf = "!sh -c 'BRANCH=`git cur && git push --force-with-lease origin $BRANCH'"
     pushff = "!sh -c 'BRANCH=`git cur && git push -f origin $BRANCH'"
+    up = "!sh -c 'git checkout master && git pull'"
     
