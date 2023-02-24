@@ -1,31 +1,6 @@
 [user]
 	name = Frode Nilsen
-	email = a@b.se
-[push]
-	default = current
-[merge]
-	tool = meld
-#	tool = bc4
-
-[difftool "bc4"]
-    cmd = "bcompare" \"$LOCAL\" \"$REMOTE\"
-[mergetool "bc4"]
-    cmd = "bcompare" \"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\"
-
-[mergetool "meld"]
-	path = /usr/bin/meld
-
-[difftool "meld"]
-        cmd = meld "$LOCAL" "$REMOTE"
-[difftool]
-	prompt=false
-[diff]
-        tool = meld
-	external = meld
-
-[core]
-	autocrlf = input
-	editor = vim
+	email = frode.nilsen@ruter.no
 
 [alias]
     find-merge = "!sh -c 'commit=$0 && branch=${1:-HEAD} && (git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n) | sort -k2 | uniq -f1 -d | sort -n | tail -1 | cut -f2'"
@@ -33,10 +8,12 @@
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit
     logbranch = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --no-merges develop..
     recheckout = "!sh -c 'git checkout master -f && git pull && git branch -D $0 && git checkout $0'"
-	  releaselist = "log --merges --first-parent release --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit"
+	releaselist = "log --merges --first-parent release --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit"
     cur = "!sh -c 'git branch -a | grep \"*\" | cut -d \" \" -f 2'"
-    pushf = "!sh -c 'BRANCH=`git cur && git push --force-with-lease origin $BRANCH'"
-    pushff = "!sh -c 'BRANCH=`git cur && git push -f origin $BRANCH'"
+    pushf = "!sh -c 'BRANCH=`git cur` && git push --force-with-lease origin $BRANCH'"
+    pushff = "!sh -c 'BRANCH=`git cur` && git push -f origin $BRANCH'"
     up = "!sh -c 'git checkout master && git pull'"
     cob = "checkout -b"
-    
+	co = "checkout"
+	cp = "cherry-pick"
+
