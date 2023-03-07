@@ -12,8 +12,9 @@
     cur = "!sh -c 'git branch -a | grep \"*\" | cut -d \" \" -f 2'"
     pushf = "!sh -c 'BRANCH=`git cur` && git push --force-with-lease origin $BRANCH'"
     pushff = "!sh -c 'BRANCH=`git cur` && git push -f origin $BRANCH'"
-    up = "!sh -c 'git checkout master && git pull'"
+	up = fetch origin master:master
     cob = "checkout -b"
 	co = "checkout"
 	cp = "cherry-pick"
+	cos = "!bash -c 'echo `git branch -a | grep $0 | head -n 1`'"
 
